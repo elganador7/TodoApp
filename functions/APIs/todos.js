@@ -1,6 +1,8 @@
 //todos.js
 
 const { db } = require('../util/admin');
+const functions = require("firebase-functions");
+
 
 exports.getAllTodos = (request, response) => {
 	db
@@ -17,7 +19,8 @@ exports.getAllTodos = (request, response) => {
 					createdAt: doc.data().createdAt,
 				});
 			});
-            console.log(todos)
+            functions.logger.log("Hello from info. Here's an object:", data);
+            console.log(data)
 			return response.json(todos);
 		})
 		.catch((err) => {
