@@ -6,6 +6,7 @@ const auth = require('./util/auth');
 
 const {
     getAllTodos,
+    getOneTodo,
     postOneTodo,
     deleteTodo,
     editTodo
