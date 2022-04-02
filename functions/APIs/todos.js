@@ -7,6 +7,7 @@ const functions = require("firebase-functions");
 exports.getAllTodos = (request, response) => {
 	db
 		.collection('todos')
+        .where('username', '==', request.user.username)
 		.orderBy('createdAt', 'desc')
 		.get()
 		.then((data) => {
@@ -41,7 +42,8 @@ exports.postOneTodo = (request, response) => {
     const newTodoItem = {
         title: request.body.title,
         body: request.body.body,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        username: request.user.username
     }
     db
         .collection('todos')
@@ -64,6 +66,9 @@ exports.deleteTodo = (request, response) => {
         .then((doc) => {
             if (!doc.exists) {
                 return response.status(404).json({ error: 'Todo not found' })
+            }
+            if(doc.data().username !== request.user.username){
+                return response.status(403).json({error:"UnAuthorized"})
             }
             return document.delete();
         })
